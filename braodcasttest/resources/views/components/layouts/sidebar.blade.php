@@ -9,6 +9,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('roles.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                        <span class="ml-2">Roles</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{route('products.index')}}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                         <span class="ml-2">Products</span>
                     </a>

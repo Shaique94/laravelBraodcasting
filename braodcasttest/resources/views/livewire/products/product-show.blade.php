@@ -9,4 +9,3 @@
         <p><strong>Email : </strong> {{ $product->detail }}</p>
     </div>
    
-</div>

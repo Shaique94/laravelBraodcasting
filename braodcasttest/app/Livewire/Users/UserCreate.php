@@ -4,6 +4,8 @@ namespace App\Livewire\Users;
 
 use App\Models\User;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserCreate extends Component
 {
@@ -11,27 +13,31 @@ class UserCreate extends Component
     public $email;
     public $password;
     public $password_confirmation;
+    public $allRoles;
+    public $roles = [];
 
+    public function mount(){
+        $this->allRoles = \Spatie\Permission\Models\Role::get();
+    }
     public function save(){
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|email',
+            'roles' => 'required',
             'password' => 'required|string|min:8|confirmed',
         ]);
-        User::create([
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => bcrypt($this->password),
         ]);
+        $roleNames = Role::whereIn('id', $this->roles)->pluck('name');
+
+        $user->syncRoles($roleNames);
         
         return to_route('user.index')->with('success', 'User created successfully.');
 
-        // Here you would typically save the user to the database
-        // User::create([
-        //     'name' => $this->name,
-        //     'email' => $this->email,
-        //     'password' => bcrypt($this->password),
-        // ]);
+       
 
         session()->flash('message', 'User created successfully.');
     }
